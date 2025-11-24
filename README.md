@@ -110,7 +110,7 @@ Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 
 ## 👨‍💻 Autor
 
-Creado como parte del taller de Machine Learning
+Ivan Mateo Lopez Gutierrez
 
 ## 🙏 Agradecimientos
 
