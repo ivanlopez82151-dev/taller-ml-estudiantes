@@ -1,0 +1,15 @@
+{
+    "intercept": -2.5,
+    "coef": [
+        0.05,
+        0.8,
+        -0.04,
+        0.7
+    ],
+    "features": [
+        "age",
+        "studytime",
+        "absences",
+        "G2"
+    ]
+}

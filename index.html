@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor de Rendimiento Estudiantil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-linear {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-logistic {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            text-align: center;
+            font-size: 1.1rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .input-hint {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎓 Predictor de Rendimiento</h1>
+        <p class="subtitle">Sistema de Machine Learning para estudiantes</p>
+
+        <div class="info-box">
+            <p><strong>📊 Modelos disponibles:</strong></p>
+            <p>• <strong>Regresión Lineal:</strong> Predice la nota final (0-20)</p>
+            <p>• <strong>Regresión Logística:</strong> Predice si aprueba el curso</p>
+        </div>
+
+        <form id="studentForm">
+            <div class="form-group">
+                <label for="age">👤 Edad del estudiante</label>
+                <input type="number" id="age" name="age" required min="15" max="25" step="1" value="18">
+                <div class="input-hint">Edad entre 15 y 25 años</div>
+            </div>
+
+            <div class="form-group">
+                <label for="studytime">📚 Tiempo de estudio semanal (horas)</label>
+                <input type="number" id="studytime" name="studytime" required min="0" max="20" step="0.5" value="5">
+                <div class="input-hint">Horas de estudio por semana (0-20)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="absences">❌ Número de ausencias</label>
+                <input type="number" id="absences" name="absences" required min="0" max="50" step="1" value="2">
+                <div class="input-hint">Total de ausencias en el periodo</div>
+            </div>
+
+            <div class="form-group">
+                <label for="G2">📝 Nota del segundo periodo (G2)</label>
+                <input type="number" id="G2" name="G2" required min="0" max="20" step="0.1" value="14">
+                <div class="input-hint">Nota del segundo periodo (0-20)</div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-linear" onclick="predict('linear')">
+                    📊 Predecir Nota Final
+                </button>
+                <button type="button" class="btn-logistic" onclick="predict('logistic')">
+                    🎯 ¿Aprueba el curso?
+                </button>
+            </div>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
